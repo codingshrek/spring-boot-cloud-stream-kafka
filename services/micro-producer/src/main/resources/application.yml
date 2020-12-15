@@ -1,0 +1,15 @@
+spring.cloud.stream:
+  default.contentType: application/json
+  bindings:
+    output-user:
+      destination: users
+
+---
+spring.profiles: docker
+
+server.port: 8080
+
+spring.cloud.stream.kafka.binder.brokers: kafka
+
+
+
