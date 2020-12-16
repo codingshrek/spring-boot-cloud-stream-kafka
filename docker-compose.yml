@@ -2,21 +2,28 @@ version: '2.1'
 
 services:
   producer:
-    build: microservices/micro-producer
+    build: services/micro-producer
+    ports:
+      - "8080:8080"
     mem_limit: 350m
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_CLOUD_STREAM_DEFAULTBINDER=kafka
+
     depends_on:
       - kafka
 
 
   email-service:
-    build: microservices/email-service
+    build: services/email-service
     mem_limit: 350m
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_CLOUD_STREAM_DEFAULTBINDER=kafka
+        - SPRING_PROFILES_ACTIVE=docker
+        - MANAGEMENT_HEALTH_RABBIT_ENABLED=false
+        - SPRING_CLOUD_STREAM_DEFAULTBINDER=kafka
+        - SPRING_CLOUD_STREAM_BINDINGS_INPUT_CONSUMER_PARTITIONED=false
+        - SPRING_CLOUD_STREAM_BINDINGS_INPUT_CONSUMER_INSTANCECOUNT=2
+        - SPRING_CLOUD_STREAM_BINDINGS_INPUT_CONSUMER_INSTANCEINDEX=1
     depends_on:
       - kafka
 

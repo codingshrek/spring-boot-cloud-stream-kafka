@@ -11,30 +11,27 @@ import org.springframework.stereotype.Service;
 
 @EnableBinding(UserServiceImpl.MessageSources.class)
 @Service
-public class UserServiceImpl implements  UserService{
-
+public class UserServiceImpl implements UserService {
 
 
     MessageSources messageSources;
 
     @Autowired
     public void setMessageSources(MessageSources messageSources) {
+
         this.messageSources = messageSources;
     }
 
     @Override
     public UserPojo createUser(UserPojo pojo) {
-        messageSources.outputUser().send(MessageBuilder.withPayload(new Event(Event.Type.CREATE,1,pojo)).build());
+        messageSources.outputUser().send(MessageBuilder.withPayload(new Event(Event.Type.CREATE, 1, pojo)).build());
         return pojo;
     }
 
-    public interface  MessageSources{
+    public interface MessageSources {
         @Output("output-user")
         public MessageChannel outputUser();
     }
-
-
-
 
 
 }

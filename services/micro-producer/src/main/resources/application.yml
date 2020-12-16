@@ -5,6 +5,7 @@ spring.cloud.stream:
       destination: users
 
 ---
+
 spring.profiles: docker
 
 server.port: 8080

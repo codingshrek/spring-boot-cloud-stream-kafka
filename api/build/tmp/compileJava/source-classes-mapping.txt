@@ -1,5 +1,0 @@
-com/micro/api/event/Event.java
- com.micro.api.event.Event
- com.micro.api.event.Event$Type
-com/micro/api/UserPojo.java
- com.micro.api.UserPojo
