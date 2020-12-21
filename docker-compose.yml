@@ -9,7 +9,6 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_CLOUD_STREAM_DEFAULTBINDER=kafka
-
     depends_on:
       - kafka
 
@@ -22,8 +21,7 @@ services:
         - MANAGEMENT_HEALTH_RABBIT_ENABLED=false
         - SPRING_CLOUD_STREAM_DEFAULTBINDER=kafka
         - SPRING_CLOUD_STREAM_BINDINGS_INPUT_CONSUMER_PARTITIONED=false
-        - SPRING_CLOUD_STREAM_BINDINGS_INPUT_CONSUMER_INSTANCECOUNT=2
-        - SPRING_CLOUD_STREAM_BINDINGS_INPUT_CONSUMER_INSTANCEINDEX=1
+
     depends_on:
       - kafka
 

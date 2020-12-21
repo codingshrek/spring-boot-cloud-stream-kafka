@@ -1,5 +1,4 @@
-package com.micro.consumer.service;
-
+package com.micro.consumer.user.service;
 
 import com.micro.api.UserPojo;
 import com.micro.api.event.Event;
@@ -9,21 +8,22 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Sink;
 
 @EnableBinding(Sink.class)
-public class EmailMessageProcessor {
+public class MessageProcessor {
 
-
-    protected  EmailService emailService;
+    private UserService userService;
 
     @Autowired
-    public void setEmailService(EmailService emailService) {
-        this.emailService = emailService;
+    public void setUserService(UserService userService) {
+        this.userService = userService;
     }
 
-    @StreamListener(target = Sink.INPUT)
-    public void process(Event<Integer, UserPojo> event){
-        switch (event.getEventType()) {
+    @StreamListener(Sink.INPUT)
+    public void processMessage(Event<Integer, UserPojo> event){
+
+
+        switch (event.getEventType()){
             case CREATE:
-                emailService.sendEmail(event.getData());
+                userService.createUser(event.getData());
                 break;
             default:
                 String errorMessage = "Incorrect event type: " + event.getEventType() + ", expected a CREATE or DELETE event";

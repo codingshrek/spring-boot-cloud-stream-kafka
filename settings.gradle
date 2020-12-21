@@ -1,3 +1,4 @@
 include ':api'
 include ':services:micro-producer'
 include ':services:email-service'
+include ':services:user-service'
