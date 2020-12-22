@@ -9,8 +9,10 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_CLOUD_STREAM_DEFAULTBINDER=kafka
+      - SPRING_CLOUD_STREAM_BINDINGS_OUTPUT-USER_PRODUCER_PARTITION-COUNT=3
     depends_on:
       - kafka
+      - kafka1
 
 
   email-service:
@@ -21,10 +23,52 @@ services:
         - MANAGEMENT_HEALTH_RABBIT_ENABLED=false
         - SPRING_CLOUD_STREAM_DEFAULTBINDER=kafka
         - SPRING_CLOUD_STREAM_BINDINGS_INPUT_CONSUMER_PARTITIONED=false
-
+        - SPRING_CLOUD_STREAM_BINDINGS_INPUT_CONSUMER_INSTANCECOUNT=2
+        - SPRING_CLOUD_STREAM_BINDINGS_INPUT_CONSUMER_INSTANCEINDEX=0
     depends_on:
       - kafka
+      - kafka1
 
+  email-service-1:
+    build: services/email-service
+    mem_limit: 350m
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - MANAGEMENT_HEALTH_RABBIT_ENABLED=false
+      - SPRING_CLOUD_STREAM_DEFAULTBINDER=kafka
+      - SPRING_CLOUD_STREAM_BINDINGS_INPUT_CONSUMER_PARTITIONED=false
+      - SPRING_CLOUD_STREAM_BINDINGS_INPUT_CONSUMER_INSTANCECOUNT=2
+      - SPRING_CLOUD_STREAM_BINDINGS_INPUT_CONSUMER_INSTANCEINDEX=1
+    depends_on:
+      - kafka
+      - kafka1
+
+  user-service:
+    build: services/user-service
+    mem_limit: 350m
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - MANAGEMENT_HEALTH_RABBIT_ENABLED=false
+      - SPRING_CLOUD_STREAM_DEFAULTBINDER=kafka
+      - SPRING_CLOUD_STREAM_BINDINGS_INPUT_CONSUMER_PARTITIONED=false
+      - SPRING_CLOUD_STREAM_BINDINGS_INPUT_CONSUMER_INSTANCECOUNT=2
+      - SPRING_CLOUD_STREAM_BINDINGS_INPUT_CONSUMER_INSTANCEINDEX=0
+    depends_on:
+      - kafka
+      - kafka1
+
+  user-service-1:
+    build: services/user-service
+    mem_limit: 350m
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_CLOUD_STREAM_DEFAULTBINDER=kafka
+      - SPRING_CLOUD_STREAM_BINDINGS_INPUT_CONSUMER_PARTITIONED=true
+      - SPRING_CLOUD_STREAM_BINDINGS_INPUT_CONSUMER_INSTANCECOUNT=2
+      - SPRING_CLOUD_STREAM_BINDINGS_INPUT_CONSUMER_INSTANCEINDEX=1
+    depends_on:
+      - kafka
+      - kafka1
 
   kafka:
     image: wurstmeister/kafka:2.12-2.1.0
@@ -34,6 +78,18 @@ services:
     environment:
       - KAFKA_ADVERTISED_HOST_NAME=kafka
       - KAFKA_ADVERTISED_PORT=9092
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+    depends_on:
+      - zookeeper
+
+  kafka1:
+    image: wurstmeister/kafka:2.12-2.1.0
+    mem_limit: 350m
+    ports:
+      - "9091:9091"
+    environment:
+      - KAFKA_ADVERTISED_HOST_NAME=kafka1
+      - KAFKA_ADVERTISED_PORT=9091
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
     depends_on:
       - zookeeper
