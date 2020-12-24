@@ -10,7 +10,7 @@ spring.profiles: docker
 
 server.port: 8080
 
-spring.cloud.stream.kafka.binder.brokers: kafka:9092,kafka1:9091
+spring.cloud.stream.kafka.binder.brokers: kafka1:19092,kafka2:19093
 
 
 
